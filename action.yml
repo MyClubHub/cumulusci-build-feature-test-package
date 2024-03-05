@@ -14,15 +14,20 @@ inputs:
     description: 'Name of the scratch org config to use'
     required: true
     default: dev
+  use-sf:
+    description: 'Option to use new sf cli over sfdx-cli'
+    required: false
+    default: 'False'
 runs:
   using: "composite"
   steps:
-    - uses: MyClubHub/cumulusci-run-flow-scratch@v2
+    - uses: MyClubHub/cumulusci-run-flow-scratch@v3
       with:
         dev-hub-auth-url: '${{ inputs.dev-hub-auth-url }}'
         org-name: '${{ inputs.org-name }}'
         cumulusci-version: '${{ inputs.cumulusci-version }}'
         sfdx-version: '${{ inputs.sfdx-version }}'
+        use-sf: '${{ inputs.use-sf }}'
         flow-name: build_feature_test_package
         commit-status-name: "Build Feature Test Package"
         commit-status-regex: "04t[a-zA-Z0-9]*"
