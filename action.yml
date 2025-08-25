@@ -22,29 +22,28 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Run conditional package build
-      shell: bash
-      run: |
-        if [[ "${{ inputs.delete-scratch-org }}" == "false" ]]; then
-          echo "Building Feature Test Package..."
-          gh workflow run MyClubHub/cumulusci-run-flow-scratch@main \
-            --with dev-hub-auth-url="${{ inputs.dev-hub-auth-url }}" \
-            --with org-name="${{ inputs.org-name }}" \
-            --with cumulusci-version="${{ inputs.cumulusci-version }}" \
-            --with sf-version="${{ inputs.sf-version }}" \
-            --with flow-name="build_feature_test_package" \
-            --with commit-status-name="Build Feature Test Package" \
-            --with commit-status-regex="04t[a-zA-Z0-9]*" \
-            --with commit-status-description-prefix="version_id: "
-        else
-          echo "Building Unlocked Test Package..."
-          gh workflow run MyClubHub/cumulusci-run-flow-scratch@main \
-            --with dev-hub-auth-url="${{ inputs.dev-hub-auth-url }}" \
-            --with org-name="${{ inputs.org-name }}" \
-            --with cumulusci-version="${{ inputs.cumulusci-version }}" \
-            --with sf-version="${{ inputs.sf-version }}" \
-            --with flow-name="create_managed_no_validation" \
-            --with commit-status-name="Build Managed Test Package" \
-            --with commit-status-regex="04t[a-zA-Z0-9]*" \
-            --with commit-status-description-prefix="version_id: "
-        fi
+    - name: Build Feature Test Package
+      if: ${{ github.event.inputs.delete-scratch-org == 'true' }}
+      uses: MyClubHub/cumulusci-run-flow-scratch@main
+      with:
+        dev-hub-auth-url: '${{ inputs.dev-hub-auth-url }}'
+        org-name: '${{ inputs.org-name }}'
+        cumulusci-version: '${{ inputs.cumulusci-version }}'
+        sf-version: '${{ inputs.sf-version }}'
+        flow-name: build_feature_test_package
+        commit-status-name: "Build Feature Test Package"
+        commit-status-regex: "04t[a-zA-Z0-9]*"
+        commit-status-description-prefix: "version_id: "
+
+    - name: Build Managed Test Package
+      if: ${{ github.event.inputs.delete-scratch-org == 'false' }}
+      uses: MyClubHub/cumulusci-run-flow-scratch@main
+      with:
+        dev-hub-auth-url: '${{ inputs.dev-hub-auth-url }}'
+        org-name: '${{ inputs.org-name }}'
+        cumulusci-version: '${{ inputs.cumulusci-version }}'
+        sf-version: '${{ inputs.sf-version }}'
+        flow-name: create_managed_no_validation
+        commit-status-name: "Build Managed Test Package"
+        commit-status-regex: "04t[a-zA-Z0-9]*"
+        commit-status-description-prefix: "version_id: "
