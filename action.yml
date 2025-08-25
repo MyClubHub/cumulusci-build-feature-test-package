@@ -23,7 +23,7 @@ runs:
   using: "composite"
   steps:
     - name: Build Feature Test Package
-      if: ${{ github.event.inputs.delete-scratch-org == 'true' }}
+      if: ${{ (inputs.delete-scratch-org == 'true') }}
       uses: MyClubHub/cumulusci-run-flow-scratch@main
       with:
         dev-hub-auth-url: '${{ inputs.dev-hub-auth-url }}'
@@ -36,7 +36,7 @@ runs:
         commit-status-description-prefix: "version_id: "
 
     - name: Build Managed Test Package
-      if: ${{ github.event.inputs.delete-scratch-org == 'false' }}
+      if: ${{ (inputs.delete-scratch-org == 'false') }}
       uses: MyClubHub/cumulusci-run-flow-scratch@main
       with:
         dev-hub-auth-url: '${{ inputs.dev-hub-auth-url }}'
