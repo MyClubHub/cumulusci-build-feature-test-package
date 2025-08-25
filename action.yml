@@ -35,7 +35,7 @@ runs:
         commit-status-regex: "04t[a-zA-Z0-9]*"
         commit-status-description-prefix: "version_id: "
 
-    - name: Build Managed Test Package
+    - name: Build Feature Test Package
       if: ${{ (inputs.delete-scratch-org == 'false') }}
       uses: MyClubHub/cumulusci-run-flow-scratch@main
       with:
