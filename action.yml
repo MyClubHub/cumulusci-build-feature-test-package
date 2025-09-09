@@ -47,4 +47,3 @@ runs:
         commit-status-name: "Build Feature Test Package"
         commit-status-regex: "04t[a-zA-Z0-9]*"
         commit-status-description-prefix: "version_id: "
-        delete-scratch-org: '${{ inputs.delete-scratch-org }}'
